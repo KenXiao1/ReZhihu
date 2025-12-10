@@ -1,0 +1,27 @@
+name = "zhihu-rss-worker"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+
+# Cron Triggers - 每 5 分钟运行一次抓取任务
+[triggers]
+crons = ["*/5 * * * *"]
+
+# D1 数据库绑定
+[[d1_databases]]
+binding = "DB"
+database_name = "zhihu-rss-db"
+database_id = "YOUR_DATABASE_ID"  # 部署后替换
+
+# R2 存储绑定 (用于缓存 feed)
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "zhihu-rss-feeds"
+
+# KV 存储绑定 (用于快速缓存)
+[[kv_namespaces]]
+binding = "KV"
+id = "YOUR_KV_ID"  # 部署后替换
+
+# 环境变量
+[vars]
+BATCH_SIZE = "50"
