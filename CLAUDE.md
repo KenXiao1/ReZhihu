@@ -55,7 +55,28 @@ npm run db:init:remote
 - Cookies stored in KV for runtime updates without redeployment
 - D1 batch operations limited to 50 statements per batch
 
+## API Routes
+
+| Path | Method | Description |
+|------|--------|-------------|
+| `/` | GET | Web UI |
+| `/feed.xml` | GET | RSS Feed |
+| `/feed.json` | GET | JSON Feed |
+| `/api/feed` | GET | Feed data for UI |
+| `/api/status` | GET | System status |
+| `/api/sync` | POST | Sync followed users |
+| `/api/cookie` | POST | Update Zhihu cookie |
+| `/api/rules` | GET/POST | Filter rules CRUD |
+| `/api/content/:id` | GET | Content detail |
+
 ## Configuration
 
-- `wrangler.toml`: Bindings for DB, KV, R2, and cron schedule (`*/5 * * * *`)
-- Cookie can be set via Web UI settings page or `wrangler secret put ZHIHU_COOKIES`
+**Env Bindings** (defined in `types.ts`):
+- `DB`: D1Database - main storage
+- `KV`: KVNamespace - cookie storage and feed cache
+- `BUCKET`: R2Bucket - reserved for future use
+- `BATCH_SIZE`: string - users per cron batch (default "50")
+
+**Setup**:
+- `wrangler.toml`: Configure DB/KV IDs and cron schedule (`*/5 * * * *`)
+- Cookie: Set via Web UI settings or `wrangler secret put ZHIHU_COOKIES`

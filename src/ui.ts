@@ -1,4 +1,4 @@
-// Web UI 页面生成
+// Web UI 页面生成 - 编辑式设计风格
 
 export function generateIndexPage(): string {
   return `<!DOCTYPE html>
@@ -6,794 +6,822 @@ export function generateIndexPage(): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>我的知乎订阅</title>
+  <title>知乎订阅</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* 基础变量 - Light Mode */
-      --primary: #0066ff;
-      --primary-hover: #0052cc;
-      --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      --card-bg: rgba(255, 255, 255, 0.65);
-      --glass-border: 1px solid rgba(255, 255, 255, 0.4);
-      --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-      --text: #1a1a1a;
-      --text-secondary: #555;
-      --border: rgba(255, 255, 255, 0.18);
-      --success: #52c41a;
-      --warning: #faad14;
-      --error: #ff4d4f;
-      --radius-lg: 16px;
-      --radius-md: 12px;
-      --radius-sm: 8px;
+      --serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', serif;
+      --sans: 'IBM Plex Sans', -apple-system, sans-serif;
+
+      --ink: #1a1a1a;
+      --ink-light: #4a4a4a;
+      --ink-muted: #888;
+      --paper: #faf9f7;
+      --paper-warm: #f5f3ef;
+      --rule: #e0ddd8;
+      --accent: #c41e3a;
+      --accent-muted: rgba(196, 30, 58, 0.08);
     }
 
     [data-theme="dark"] {
-      --primary: #4d94ff;
-      --primary-hover: #1a73e8;
-      --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-      --card-bg: rgba(20, 20, 20, 0.65);
-      --glass-border: 1px solid rgba(255, 255, 255, 0.08);
-      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-      --text: #ffffff;
-      --text-secondary: #a0a0a0;
-      --border: rgba(255, 255, 255, 0.05);
+      --ink: #e8e6e3;
+      --ink-light: #b0ada8;
+      --ink-muted: #706d68;
+      --paper: #1c1b1a;
+      --paper-warm: #242322;
+      --rule: #3a3836;
+      --accent: #e85d75;
+      --accent-muted: rgba(232, 93, 117, 0.12);
     }
 
-    [data-theme="eye-care"] {
-      --primary: #8c6e4e;
-      --primary-hover: #6d543b;
-      --bg-gradient: linear-gradient(135deg, #fdfbf7 0%, #f3eac8 100%);
-      --card-bg: rgba(253, 248, 235, 0.7);
-      --glass-border: 1px solid rgba(255, 252, 240, 0.6);
-      --glass-shadow: 0 8px 24px 0 rgba(140, 110, 78, 0.05);
-      --text: #3d3b36;
-      --text-secondary: #706b60;
-      --border: rgba(140, 110, 78, 0.1);
+    [data-theme="sepia"] {
+      --ink: #433422;
+      --ink-light: #5c4a35;
+      --ink-muted: #8a7a68;
+      --paper: #f4ecd8;
+      --paper-warm: #ebe3cf;
+      --rule: #d4c9b0;
+      --accent: #8b4513;
+      --accent-muted: rgba(139, 69, 19, 0.1);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 17px; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: var(--bg-gradient);
-      background-attachment: fixed;
-      color: var(--text);
-      line-height: 1.6;
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.7;
       min-height: 100vh;
-      transition: color 0.3s ease;
+      transition: background 0.4s, color 0.4s;
     }
 
-    /* 玻璃拟态基础类 */
-    .glass {
-      background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: var(--glass-border);
-      box-shadow: var(--glass-shadow);
-    }
-
-    /* 导航栏 */
-    .navbar {
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: var(--glass-border);
-      padding: 12px 24px;
+    /* 顶部导航 */
+    header {
+      border-bottom: 1px solid var(--rule);
+      background: var(--paper);
       position: sticky;
       top: 0;
       z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.2rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: all 0.3s ease;
     }
 
-    .navbar h1 {
-      font-size: 22px;
+    .logo {
+      font-family: var(--serif);
+      font-size: 1.5rem;
       font-weight: 700;
-      color: var(--primary);
-      text-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      letter-spacing: -0.5px;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      text-decoration: none;
     }
 
-    .navbar-actions {
+    .logo span {
+      color: var(--accent);
+    }
+
+    .header-actions {
       display: flex;
-      gap: 12px;
+      gap: 1.5rem;
       align-items: center;
     }
 
-    /* 主题切换器 */
-    .theme-switcher {
+    .theme-toggle {
       display: flex;
-      background: rgba(0,0,0,0.05);
-      padding: 3px;
-      border-radius: 20px;
-      margin-right: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-
-    [data-theme="dark"] .theme-switcher {
-      background: rgba(255,255,255,0.1);
+      gap: 0.25rem;
+      padding: 0.25rem;
+      background: var(--paper-warm);
+      border-radius: 2px;
     }
 
     .theme-btn {
       width: 32px;
       height: 32px;
-      border-radius: 50%;
       border: none;
       background: transparent;
       cursor: pointer;
-      font-size: 16px;
+      color: var(--ink-muted);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s ease;
-      opacity: 0.6;
+      transition: all 0.2s;
     }
 
-    .theme-btn:hover {
-      opacity: 1;
-      background: rgba(128,128,128,0.1);
+    .theme-btn svg {
+      width: 16px;
+      height: 16px;
     }
+
+    .theme-btn:hover { color: var(--ink); }
 
     .theme-btn.active {
-      background: var(--card-bg);
-      opacity: 1;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transform: scale(1.05);
+      background: var(--paper);
+      color: var(--ink);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
 
-    /* 标签页 */
-    .tabs-container {
-      padding: 0 20px;
+    .nav-link {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--ink-light);
+      text-decoration: none;
+      padding: 0.4rem 0;
+      border-bottom: 1.5px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--ink);
+      border-bottom-color: var(--ink);
+    }
+
+    /* 主导航标签 */
+    .nav-tabs {
+      border-bottom: 1px solid var(--rule);
+      background: var(--paper-warm);
+    }
+
+    .nav-tabs-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
       display: flex;
-      justify-content: center;
-      margin-top: 20px;
-    }
-
-    .tabs {
-      display: inline-flex;
-      background: var(--card-bg);
-      backdrop-filter: blur(8px);
-      padding: 5px;
-      border-radius: var(--radius-lg);
-      border: var(--glass-border);
-      gap: 5px;
+      gap: 0;
     }
 
     .tab {
-      padding: 10px 24px;
-      cursor: pointer;
-      border-radius: var(--radius-md);
-      color: var(--text-secondary);
-      transition: all 0.3s;
+      padding: 1rem 1.5rem;
+      font-size: 0.9rem;
       font-weight: 500;
+      color: var(--ink-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.2s;
       user-select: none;
     }
 
-    .tab:hover {
-      color: var(--text);
-      background: rgba(255,255,255,0.1);
-    }
+    .tab:hover { color: var(--ink-light); }
 
     .tab.active {
-      color: var(--primary);
-      background: rgba(255,255,255,0.8);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    
-    [data-theme="dark"] .tab.active {
-        background: rgba(255,255,255,0.15);
-        color: #fff;
+      color: var(--ink);
+      border-bottom-color: var(--accent);
     }
 
     /* 主内容区 */
-    .container {
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 0 20px 40px;
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
     }
 
     .tab-content {
-      animation: fadeIn 0.4s ease;
+      display: none;
+      animation: fadeIn 0.3s ease;
     }
 
+    .tab-content.active { display: block; }
+
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 按钮 */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: all 0.3s;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-      box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(0, 102, 255, 0.4);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.5);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    [data-theme="dark"] .btn-secondary {
-        background: rgba(255,255,255,0.1);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.8);
-      transform: translateY(-1px);
-    }
-
-    /* 状态卡片 */
-    .status-bar {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    .status-item {
-      padding: 24px;
-      border-radius: var(--radius-lg);
+    /* 筛选栏 */
+    .filter-bar {
       display: flex;
-      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--rule);
+      flex-wrap: wrap;
       align-items: center;
-      text-align: center;
-      transition: transform 0.3s;
     }
 
-    .status-item:hover {
-      transform: translateY(-5px);
+    .search-box {
+      flex: 1;
+      min-width: 240px;
+      position: relative;
     }
 
-    .status-item .label {
-      font-size: 14px;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
+    .search-box input {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      padding-left: 2.2rem;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      color: var(--ink);
+      transition: all 0.2s;
     }
 
-    .status-item .value {
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--primary);
-      text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--ink-muted);
+    }
+
+    .search-box::before {
+      content: '';
+      position: absolute;
+      left: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid var(--ink-muted);
+      border-radius: 50%;
+    }
+
+    .search-box::after {
+      content: '';
+      position: absolute;
+      left: 1.55rem;
+      top: 60%;
+      width: 5px;
+      height: 1.5px;
+      background: var(--ink-muted);
+      transform: rotate(45deg);
+    }
+
+    .filter-select {
+      padding: 0.6rem 2rem 0.6rem 0.8rem;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      color: var(--ink);
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.8rem center;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--ink-muted);
     }
 
     /* Feed 列表 */
     .feed-list {
       display: flex;
       flex-direction: column;
-      gap: 20px;
     }
 
     .feed-item {
-      border-radius: var(--radius-lg);
-      padding: 24px;
+      padding: 1.8rem 0;
+      border-bottom: 1px solid var(--rule);
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      position: relative;
-      overflow: hidden;
+      transition: background 0.2s;
     }
 
-    .feed-item::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 3px;
-      height: 100%;
-      background: var(--primary);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
+    .feed-item:first-child { padding-top: 0; }
 
     .feed-item:hover {
-      transform: translateY(-4px) scale(1.01);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.1);
-    }
-
-    .feed-item:hover::before {
-      opacity: 1;
+      background: var(--accent-muted);
+      margin: 0 -1rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
     }
 
     .feed-item-header {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 12px;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 0.6rem;
     }
 
-    .feed-item-title {
-      font-size: 19px;
+    .feed-type {
+      font-size: 0.7rem;
       font-weight: 600;
-      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .feed-title {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--ink);
       text-decoration: none;
+      line-height: 1.4;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      line-height: 1.4;
-      margin-right: 10px;
     }
 
-    .feed-item-type {
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-weight: 500;
-      flex-shrink: 0;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
+    .feed-title:hover { text-decoration: underline; }
 
-    .feed-item-type.article { background: rgba(24, 144, 255, 0.15); color: #1890ff; }
-    .feed-item-type.answer { background: rgba(82, 196, 26, 0.15); color: #52c41a; }
-    .feed-item-type.pin { background: rgba(250, 140, 22, 0.15); color: #fa8c16; }
-    
-    [data-theme="dark"] .feed-item-type.article { color: #69c0ff; }
-    [data-theme="dark"] .feed-item-type.answer { color: #95de64; }
-    [data-theme="dark"] .feed-item-type.pin { color: #ffc069; }
-
-    .feed-item-excerpt {
-      font-size: 15px;
-      color: var(--text-secondary);
+    .feed-excerpt {
+      font-size: 0.95rem;
+      color: var(--ink-light);
+      line-height: 1.7;
       display: -webkit-box;
-      -webkit-line-clamp: 3;
+      -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      margin-bottom: 16px;
-      line-height: 1.6;
+      margin-bottom: 0.8rem;
     }
 
-    .feed-item-meta {
+    .feed-meta {
       display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      font-size: 13px;
-      color: var(--text-secondary);
-      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
     }
 
-    .feed-item-meta span {
+    .feed-meta-item {
       display: flex;
       align-items: center;
-      gap: 6px;
-      background: rgba(0,0,0,0.03);
-      padding: 4px 10px;
-      border-radius: 6px;
+      gap: 0.3rem;
     }
-    
-    [data-theme="dark"] .feed-item-meta span {
-        background: rgba(255,255,255,0.05);
+
+    .meta-label {
+      font-weight: 500;
+    }
+
+    /* 空状态 */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--ink-muted);
+    }
+
+    .empty-state h3 {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--ink-light);
+    }
+
+    /* 加载状态 */
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      color: var(--ink-muted);
+    }
+
+    .loading-bar {
+      width: 120px;
+      height: 2px;
+      background: var(--rule);
+      margin: 0 auto 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .loading-bar::after {
+      content: '';
+      position: absolute;
+      left: -40%;
+      width: 40%;
+      height: 100%;
+      background: var(--accent);
+      animation: loading 1s ease-in-out infinite;
+    }
+
+    @keyframes loading {
+      0% { left: -40%; }
+      100% { left: 100%; }
     }
 
     /* 模态框 */
     .modal-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
+      inset: 0;
+      background: rgba(0,0,0,0.5);
       display: none;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 2rem;
       z-index: 1000;
-      animation: fadeIn 0.3s;
     }
 
-    .modal-overlay.active {
-      display: flex;
-    }
+    .modal-overlay.active { display: flex; }
 
     .modal {
-      border-radius: var(--radius-lg);
-      max-width: 800px;
+      background: var(--paper);
+      max-width: 720px;
       width: 100%;
       max-height: 85vh;
       display: flex;
       flex-direction: column;
-      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-    }
-    
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
     }
 
     .modal-header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--rule);
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-      background: rgba(255,255,255,0.5);
-    }
-    
-    [data-theme="dark"] .modal-header {
-      background: rgba(0,0,0,0.2);
+      gap: 1rem;
     }
 
     .modal-title {
-      font-size: 22px;
-      font-weight: 700;
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 600;
       line-height: 1.4;
     }
 
     .modal-close {
-      font-size: 28px;
+      font-size: 1.5rem;
       cursor: pointer;
-      color: var(--text-secondary);
+      color: var(--ink-muted);
       border: none;
       background: none;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
+      padding: 0;
+      line-height: 1;
     }
 
-    .modal-close:hover {
-      background: rgba(0,0,0,0.1);
-      color: var(--text);
-    }
-    
-    [data-theme="dark"] .modal-close:hover {
-        background: rgba(255,255,255,0.1);
-    }
+    .modal-close:hover { color: var(--ink); }
 
     .modal-body {
-      padding: 30px;
+      padding: 2rem;
       overflow-y: auto;
-      font-size: 17px;
-      line-height: 1.8;
+      font-size: 1rem;
+      line-height: 1.85;
+    }
+
+    .modal-meta {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+      padding-bottom: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--rule);
+      flex-wrap: wrap;
     }
 
     .modal-content img {
       max-width: 100%;
       height: auto;
-      border-radius: var(--radius-md);
-      margin: 15px 0;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      margin: 1rem 0;
     }
 
     .modal-content pre {
-      background: rgba(0,0,0,0.05);
-      padding: 20px;
-      border-radius: var(--radius-md);
+      background: var(--paper-warm);
+      padding: 1rem;
       overflow-x: auto;
-      font-family: 'Fira Code', monospace;
-      margin: 20px 0;
+      font-family: 'SF Mono', Consolas, monospace;
+      font-size: 0.85rem;
+      margin: 1rem 0;
     }
 
     .modal-content blockquote {
-      border-left: 4px solid var(--primary);
-      padding: 10px 20px;
-      margin: 20px 0;
-      background: rgba(var(--primary), 0.1); /* This might not work with hex vars */
-      background: rgba(100, 100, 100, 0.05);
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      color: var(--text-secondary);
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+      margin: 1rem 0;
+      color: var(--ink-light);
       font-style: italic;
     }
 
     /* 设置面板 */
     .settings-panel {
-      border-radius: var(--radius-lg);
-      padding: 30px;
-      margin-bottom: 20px;
+      background: var(--paper-warm);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     .settings-section {
-      margin-bottom: 30px;
+      margin-bottom: 2rem;
     }
 
+    .settings-section:last-child { margin-bottom: 0; }
+
     .settings-section h3 {
-      font-size: 18px;
-      margin-bottom: 18px;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .settings-hint {
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .form-group { margin-bottom: 1rem; }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--ink-light);
     }
 
     .form-group input,
     .form-group textarea {
       width: 100%;
-      padding: 12px 16px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      background: rgba(255,255,255,0.3);
-      color: var(--text);
-      font-size: 15px;
-      transition: all 0.3s;
+      padding: 0.7rem 1rem;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      color: var(--ink);
     }
-    
-    [data-theme="dark"] .form-group input,
-    [data-theme="dark"] .form-group textarea {
-        background: rgba(0,0,0,0.2);
+
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
     }
 
     .form-group input:focus,
     .form-group textarea:focus {
       outline: none;
-      border-color: var(--primary);
-      background: rgba(255,255,255,0.8);
-      box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
-    }
-    
-    [data-theme="dark"] .form-group input:focus,
-    [data-theme="dark"] .form-group textarea:focus {
-        background: rgba(0,0,0,0.4);
+      border-color: var(--ink-muted);
     }
 
-    /* 筛选栏 */
-    .filter-bar {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      padding: 15px;
-      border-radius: var(--radius-lg);
-      border: var(--glass-border);
-    }
-
-    .filter-bar select,
-    .filter-bar input[type="search"] {
-      padding: 10px 16px;
-      border: 1px solid rgba(0,0,0,0.1);
-      border-radius: var(--radius-md);
-      background: rgba(255,255,255,0.5);
-      color: var(--text);
-      font-size: 14px;
-      backdrop-filter: blur(5px);
+    /* 按钮 */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
       transition: all 0.2s;
     }
-    
-    [data-theme="dark"] .filter-bar select,
-    [data-theme="dark"] .filter-bar input[type="search"] {
-      background: rgba(0,0,0,0.3);
-      border-color: rgba(255,255,255,0.1);
+
+    .btn-primary {
+      background: var(--ink);
+      color: var(--paper);
     }
 
-    .filter-bar input[type="search"] {
-      flex: 1;
-      min-width: 250px;
+    .btn-primary:hover {
+      background: var(--ink-light);
     }
 
-    .filter-bar input[type="search"]:focus {
-      background: rgba(255,255,255,0.9);
-      border-color: var(--primary);
-      outline: none;
+    .btn-secondary {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--rule);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--ink-muted);
     }
 
     /* 规则列表 */
     .rules-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
     }
 
     .rule-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 20px;
-      background: rgba(255,255,255,0.3);
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-    }
-    
-    [data-theme="dark"] .rule-item {
-        background: rgba(0,0,0,0.2);
+      padding: 0.6rem 1rem;
+      background: var(--paper);
+      border: 1px solid var(--rule);
     }
 
-    /* 加载动画 */
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid rgba(0, 0, 0, 0.1);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.8s ease-in-out infinite;
-      margin: 0 auto 20px;
+    .rule-type {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-right: 0.8rem;
     }
-    
-    [data-theme="dark"] .spinner {
-      border-color: rgba(255,255,255,0.1);
-      border-top-color: var(--primary);
+
+    .rule-value {
+      flex: 1;
+      font-size: 0.9rem;
+    }
+
+    .add-rule-form {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .add-rule-form select,
+    .add-rule-form input {
+      padding: 0.6rem 0.8rem;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      border: 1px solid var(--rule);
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .add-rule-form input { flex: 1; min-width: 200px; }
+
+    /* 状态面板 */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .status-card {
+      background: var(--paper-warm);
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .status-card .label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .status-card .value {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .status-detail {
+      background: var(--paper-warm);
+      padding: 1.5rem;
+    }
+
+    .status-detail h3 {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .status-detail pre {
+      font-family: 'SF Mono', Consolas, monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: var(--ink-light);
+      white-space: pre-wrap;
+      word-break: break-all;
     }
 
     /* Toast */
     .toast {
       position: fixed;
-      bottom: 30px;
+      bottom: 2rem;
       left: 50%;
       transform: translateX(-50%) translateY(20px);
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
-      padding: 14px 28px;
-      border-radius: 50px;
-      z-index: 2000;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 0.8rem 1.5rem;
+      font-size: 0.9rem;
       opacity: 0;
-      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      backdrop-filter: blur(10px);
-      font-weight: 500;
+      transition: all 0.3s;
+      z-index: 2000;
     }
 
     .toast.show {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
-    
-    [data-theme="eye-care"] .toast {
-        background: rgba(92, 75, 54, 0.9);
-    }
 
-    /* 滚动条美化 */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
+    /* 响应式 */
+    @media (max-width: 640px) {
+      html { font-size: 15px; }
 
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
+      .header-inner { padding: 1rem; }
 
-    ::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.1);
-      border-radius: 4px;
-    }
+      .nav-tabs-inner { padding: 0 1rem; }
 
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(0, 0, 0, 0.2);
-    }
-    
-    [data-theme="dark"] ::-webkit-scrollbar-thumb {
-        background: rgba(255,255,255,0.2);
-    }
-    
-    [data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
-        background: rgba(255,255,255,0.3);
-    }
+      main { padding: 1.5rem 1rem 3rem; }
 
-    @media (max-width: 600px) {
-      .navbar {
-        flex-direction: column;
-        gap: 15px;
-        padding: 15px;
-      }
-      
-      .navbar-actions {
-        width: 100%;
-        justify-content: space-between;
+      .feed-item:hover {
+        margin: 0 -0.5rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
       }
 
-      .status-bar {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .container {
-        padding: 0 10px 40px;
-      }
-      
-      .feed-item {
-        padding: 15px;
-      }
+      .modal { margin: 1rem; }
+
+      .modal-header,
+      .modal-body { padding: 1.2rem; }
     }
-  </style>
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--rule); }
+    ::-webkit-scrollbar-thumb:hover { background: var(--ink-muted); }
+</style>
 </head>
 <body>
-  <nav class="navbar glass">
-    <h1>📰 我的知乎订阅</h1>
-    <div class="navbar-actions">
-      <!-- 主题切换 -->
-      <div class="theme-switcher">
-        <button class="theme-btn" data-theme="light" title="亮色模式">☀️</button>
-        <button class="theme-btn" data-theme="dark" title="夜间模式">🌙</button>
-        <button class="theme-btn" data-theme="eye-care" title="护眼模式">🌿</button>
+  <header>
+    <div class="header-inner">
+      <a href="/" class="logo">知乎<span>订阅</span></a>
+      <div class="header-actions">
+        <div class="theme-toggle">
+          <button class="theme-btn" data-theme="light" title="明亮">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+          </button>
+          <button class="theme-btn" data-theme="dark" title="暗色">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+            </svg>
+          </button>
+        </div>
+        <a href="/feed.xml" class="nav-link" target="_blank">RSS</a>
       </div>
-      <button class="btn btn-secondary glass" onclick="refreshFeed()">🔄 刷新</button>
-      <a href="/feed.xml" class="btn btn-secondary glass" target="_blank">📡 RSS</a>
     </div>
-  </nav>
+  </header>
 
-  <div class="tabs-container">
-    <div class="tabs glass">
-      <div class="tab active" data-tab="feed">订阅内容</div>
+  <nav class="nav-tabs">
+    <div class="nav-tabs-inner">
+      <div class="tab active" data-tab="feed">订阅</div>
       <div class="tab" data-tab="settings">设置</div>
       <div class="tab" data-tab="status">状态</div>
     </div>
-  </div>
+  </nav>
 
-  <div class="container">
-    <!-- Feed 列表 -->
-    <div id="feed-tab" class="tab-content">
-      <div class="filter-bar glass">
-        <input type="search" id="search-input" placeholder="🔍 搜索标题、作者或关键词...">
-        <select id="type-filter">
-          <option value="">📂 全部类型</option>
-          <option value="article">📄 文章</option>
-          <option value="answer">💡 回答</option>
-          <option value="pin">💭 想法</option>
+  <main>
+    <!-- Feed 内容 -->
+    <div id="feed-tab" class="tab-content active">
+      <div class="filter-bar">
+        <div class="search-box">
+          <input type="text" id="search-input" placeholder="搜索标题或作者">
+        </div>
+        <select id="type-filter" class="filter-select">
+          <option value="">全部类型</option>
+          <option value="article">文章</option>
+          <option value="answer">回答</option>
+          <option value="pin">想法</option>
         </select>
-        <select id="sort-filter">
-          <option value="score">🔥 按推荐度</option>
-          <option value="time">⏰ 按时间</option>
-          <option value="voteup">👍 按点赞</option>
+        <select id="sort-filter" class="filter-select">
+          <option value="score">按推荐</option>
+          <option value="time">按时间</option>
+          <option value="voteup">按赞数</option>
         </select>
       </div>
       <div id="feed-list" class="feed-list">
         <div class="loading">
-          <div class="spinner"></div>
-          加载中...
+          <div class="loading-bar"></div>
+          <span>正在加载</span>
         </div>
       </div>
     </div>
 
     <!-- 设置面板 -->
-    <div id="settings-tab" class="tab-content" style="display: none;">
-      <div class="settings-panel glass">
+    <div id="settings-tab" class="tab-content">
+      <div class="settings-panel">
         <div class="settings-section">
-          <h3>🔐 Cookie 设置</h3>
+          <h3>Cookie 配置</h3>
+          <p class="settings-hint">从浏览器开发者工具复制知乎的 Cookie，包含 z_c0、d_c0 等字段。</p>
           <div class="form-group">
-            <label style="margin-bottom:8px; display:block; color:var(--text-secondary)">知乎 Cookie (从浏览器复制)</label>
-            <textarea id="cookie-input" placeholder="粘贴你的知乎 Cookie..."></textarea>
+            <textarea id="cookie-input" placeholder="粘贴 Cookie..."></textarea>
           </div>
-          <button class="btn btn-primary" onclick="saveCookie()">保存 Cookie</button>
+          <button class="btn btn-primary" onclick="saveCookie()">保存</button>
         </div>
 
         <div class="settings-section">
-          <h3>🔄 同步关注列表</h3>
-          <p style="margin-bottom: 15px; color: var(--text-secondary); font-size: 14px; background: rgba(0,0,0,0.03); padding: 10px; border-radius: 8px;">
-            ⚠️ 首次使用或关注列表有变化时，请点击同步按钮更新关注列表。
-          </p>
-          <button class="btn btn-primary" onclick="syncFollowees()">同步关注列表</button>
+          <h3>同步关注列表</h3>
+          <p class="settings-hint">首次使用或关注列表变化后，点击同步更新用户列表。</p>
+          <button class="btn btn-primary" onclick="syncFollowees()">同步</button>
         </div>
 
         <div class="settings-section">
-          <h3>🚫 过滤规则</h3>
+          <h3>过滤规则</h3>
           <div id="rules-list" class="rules-list"></div>
-          <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
-            <select id="new-rule-type" style="padding: 10px; border-radius: 8px; border:1px solid var(--border);">
-              <option value="keyword_blacklist">关键词黑名单</option>
+          <div class="add-rule-form">
+            <select id="new-rule-type">
+              <option value="keyword_blacklist">关键词</option>
               <option value="min_word_count">最低字数</option>
-              <option value="author_blacklist">作者黑名单</option>
+              <option value="author_blacklist">作者</option>
             </select>
-            <input type="text" id="new-rule-value" placeholder="输入规则内容..." style="flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 8px; min-width: 200px;">
+            <input type="text" id="new-rule-value" placeholder="规则内容">
             <button class="btn btn-primary" onclick="addRule()">添加</button>
           </div>
         </div>
@@ -801,110 +829,118 @@ export function generateIndexPage(): string {
     </div>
 
     <!-- 状态面板 -->
-    <div id="status-tab" class="tab-content" style="display: none;">
-      <div class="status-bar">
-        <div class="status-item glass">
+    <div id="status-tab" class="tab-content">
+      <div class="status-grid">
+        <div class="status-card">
           <div class="label">关注用户</div>
           <div class="value" id="stat-users">-</div>
         </div>
-        <div class="status-item glass">
+        <div class="status-card">
           <div class="label">内容总数</div>
           <div class="value" id="stat-contents">-</div>
         </div>
-        <div class="status-item glass">
+        <div class="status-card">
           <div class="label">Feed 条目</div>
           <div class="value" id="stat-feed">-</div>
         </div>
-        <div class="status-item glass">
+        <div class="status-card">
           <div class="label">抓取进度</div>
           <div class="value" id="stat-batch">-</div>
         </div>
       </div>
-      <div class="settings-panel glass">
-        <h3>📊 系统详情</h3>
-        <pre id="status-detail" style="margin-top: 15px; padding: 20px; background: rgba(0,0,0,0.05); border-radius: 12px; overflow-x: auto; font-size: 13px; line-height: 1.5; color: var(--text-secondary);">加载中...</pre>
+      <div class="status-detail">
+        <h3>详细信息</h3>
+        <pre id="status-detail">加载中...</pre>
       </div>
     </div>
-  </div>
+  </main>
 
-  <!-- 内容详情模态框 -->
+  <!-- 模态框 -->
   <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
-    <div class="modal glass" onclick="event.stopPropagation()">
+    <div class="modal" onclick="event.stopPropagation()">
       <div class="modal-header">
         <h2 class="modal-title" id="modal-title">标题</h2>
         <button class="modal-close" onclick="closeModal()">&times;</button>
       </div>
       <div class="modal-body">
-        <div class="feed-item-meta" id="modal-meta" style="margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--border);"></div>
+        <div class="modal-meta" id="modal-meta"></div>
         <div class="modal-content" id="modal-content"></div>
       </div>
     </div>
   </div>
 
   <!-- Toast -->
-  <div class="toast glass" id="toast"></div>
+  <div class="toast" id="toast"></div>
 
   <script>
-    // 状态
     let feedData = [];
     let filteredData = [];
-    let currentTab = 'feed';
 
-    // 初始化
     document.addEventListener('DOMContentLoaded', () => {
       initTheme();
+      initTabs();
+      initFilters();
       loadFeed();
       loadStatus();
       loadRules();
-      initTabs();
-      initFilters();
     });
 
-    // 主题管理
+    // 主题
     function initTheme() {
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        setTheme(savedTheme);
-        
-        document.querySelectorAll('.theme-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                setTheme(btn.dataset.theme);
-            });
+      const saved = localStorage.getItem('theme');
+
+      if (saved) {
+        // 用户有明确选择
+        applyTheme(saved);
+        updateThemeButtons(saved);
+      } else {
+        // 跟随系统
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(prefersDark ? 'dark' : 'light');
+      }
+
+      // 按钮点击事件
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const theme = btn.dataset.theme;
+          localStorage.setItem('theme', theme);
+          applyTheme(theme);
+          updateThemeButtons(theme);
         });
+      });
+
+      // 监听系统主题变化（仅在用户未选择时生效）
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+          applyTheme(e.matches ? 'dark' : 'light');
+        }
+      });
     }
 
-    function setTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-        
-        // 更新按钮状态
-        document.querySelectorAll('.theme-btn').forEach(btn => {
-            if (btn.dataset.theme === theme) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
     }
 
-    // 标签页切换
+    function updateThemeButtons(theme) {
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.theme === theme);
+      });
+    }
+
+    // 标签页
     function initTabs() {
       document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => {
           document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
           tab.classList.add('active');
-          currentTab = tab.dataset.tab;
-          document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-          const content = document.getElementById(currentTab + '-tab');
-          content.style.display = 'block';
-          // 重新触发动画
-          content.style.animation = 'none';
-          content.offsetHeight; /* trigger reflow */
-          content.style.animation = 'fadeIn 0.4s ease'; // reset animation
+          const content = document.getElementById(tab.dataset.tab + '-tab');
+          content.classList.add('active');
         });
       });
     }
 
-    // 筛选器
+    // 筛选
     function initFilters() {
       document.getElementById('search-input').addEventListener('input', applyFilters);
       document.getElementById('type-filter').addEventListener('change', applyFilters);
@@ -922,7 +958,6 @@ export function generateIndexPage(): string {
         return true;
       });
 
-      // 排序
       filteredData.sort((a, b) => {
         if (sort === 'time') return b.created_time - a.created_time;
         if (sort === 'voteup') return b.voteup_count - a.voteup_count;
@@ -941,51 +976,45 @@ export function generateIndexPage(): string {
         filteredData = [...feedData];
         renderFeed();
       } catch (err) {
-        document.getElementById('feed-list').innerHTML = '<div class="empty-state" style="text-align:center; padding: 40px;"><div style="font-size:48px; margin-bottom:15px">😕</div>加载失败，请刷新重试</div>';
+        document.getElementById('feed-list').innerHTML = '<div class="empty-state"><h3>加载失败</h3><p>请刷新页面重试</p></div>';
       }
     }
 
     function renderFeed() {
       const container = document.getElementById('feed-list');
-
       if (filteredData.length === 0) {
-        container.innerHTML = '<div class="empty-state" style="text-align:center; padding: 60px; color:var(--text-secondary)"><div style="font-size:48px; margin-bottom:15px">📭</div>暂无内容<br>请先同步关注列表或尝试其他筛选条件</div>';
+        container.innerHTML = '<div class="empty-state"><h3>暂无内容</h3><p>请先同步关注列表</p></div>';
         return;
       }
 
       container.innerHTML = filteredData.map(item => \`
-        <div class="feed-item glass" onclick="openItem('\${item.id}')">
+        <div class="feed-item" onclick="openItem('\${item.id}')">
           <div class="feed-item-header">
-            <a class="feed-item-title" href="\${item.url}" target="_blank" onclick="event.stopPropagation()">\${escapeHtml(item.title)}</a>
-            <span class="feed-item-type \${item.type}">\${getTypeName(item.type)}</span>
+            <span class="feed-type">\${getTypeName(item.type)}</span>
+            <a class="feed-title" href="\${item.url}" target="_blank" onclick="event.stopPropagation()">\${escapeHtml(item.title)}</a>
           </div>
-          <p class="feed-item-excerpt">\${escapeHtml(item.excerpt)}</p>
-          <div class="feed-item-meta">
-            <span>👤 \${escapeHtml(item.author_name)}</span>
-            <span>👍 \${item.voteup_count}</span>
-            <span>💬 \${item.comment_count}</span>
-            <span>📝 \${item.word_count} 字</span>
-            <span>⏰ \${formatTime(item.created_time)}</span>
-            \${item.sources ? item.sources.map(s => \`<span class="feed-item-source">\${escapeHtml(s)}</span>\`).join('') : ''}
+          <p class="feed-excerpt">\${escapeHtml(item.excerpt)}</p>
+          <div class="feed-meta">
+            <span class="feed-meta-item"><span class="meta-label">作者</span> \${escapeHtml(item.author_name)}</span>
+            <span class="feed-meta-item"><span class="meta-label">赞</span> \${item.voteup_count}</span>
+            <span class="feed-meta-item"><span class="meta-label">字数</span> \${item.word_count}</span>
+            <span class="feed-meta-item">\${formatTime(item.created_time)}</span>
           </div>
         </div>
       \`).join('');
     }
 
     function getTypeName(type) {
-      const names = { article: '文章', answer: '回答', pin: '想法' };
-      return names[type] || type;
+      return { article: '文章', answer: '回答', pin: '想法' }[type] || type;
     }
 
-    function formatTime(timestamp) {
-      const date = new Date(timestamp * 1000);
-      const now = new Date();
-      const diff = now - date;
-
+    function formatTime(ts) {
+      const d = new Date(ts * 1000);
+      const diff = Date.now() - d.getTime();
       if (diff < 3600000) return Math.floor(diff / 60000) + ' 分钟前';
       if (diff < 86400000) return Math.floor(diff / 3600000) + ' 小时前';
       if (diff < 604800000) return Math.floor(diff / 86400000) + ' 天前';
-      return date.toLocaleDateString('zh-CN');
+      return d.toLocaleDateString('zh-CN');
     }
 
     function escapeHtml(str) {
@@ -993,43 +1022,35 @@ export function generateIndexPage(): string {
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    // 打开内容详情
+    // 模态框
     function openItem(id) {
       const item = feedData.find(i => i.id === id);
       if (!item) return;
-
       document.getElementById('modal-title').textContent = item.title;
       document.getElementById('modal-meta').innerHTML = \`
-        <span>👤 \${escapeHtml(item.author_name)}</span>
-        <span>👍 \${item.voteup_count}</span>
-        <span>💬 \${item.comment_count}</span>
-        <span>📝 \${item.word_count} 字</span>
-        <a href="\${item.url}" target="_blank" style="color: var(--primary); text-decoration:none; margin-left:auto; display:flex; align-items:center; gap:4px">在知乎查看 ↗</a>
+        <span>作者: \${escapeHtml(item.author_name)}</span>
+        <span>赞: \${item.voteup_count}</span>
+        <span>字数: \${item.word_count}</span>
+        <a href="\${item.url}" target="_blank" style="color:var(--accent);margin-left:auto">原文</a>
       \`;
       document.getElementById('modal-content').innerHTML = item.content || item.excerpt;
       document.getElementById('modal-overlay').classList.add('active');
       document.body.style.overflow = 'hidden';
     }
 
-    function closeModal(event) {
-      if (event && event.target !== event.currentTarget) return;
+    function closeModal(e) {
+      if (e && e.target !== e.currentTarget) return;
       document.getElementById('modal-overlay').classList.remove('active');
       document.body.style.overflow = '';
     }
 
-    // 刷新 Feed
-    async function refreshFeed() {
-      showToast('正在刷新...');
-      await loadFeed();
-      showToast('刷新完成');
-    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-    // 加载状态
+    // 状态
     async function loadStatus() {
       try {
         const res = await fetch('/api/status');
         const data = await res.json();
-
         document.getElementById('stat-users').textContent = data.user_count || 0;
         document.getElementById('stat-contents').textContent = data.content_count || 0;
         document.getElementById('stat-feed').textContent = data.feed_count || 0;
@@ -1041,7 +1062,7 @@ export function generateIndexPage(): string {
       }
     }
 
-    // 加载规则
+    // 规则
     async function loadRules() {
       try {
         const res = await fetch('/api/rules');
@@ -1055,123 +1076,68 @@ export function generateIndexPage(): string {
     function renderRules(rules) {
       const container = document.getElementById('rules-list');
       if (rules.length === 0) {
-        container.innerHTML = '<div style="color: var(--text-secondary); padding: 15px; text-align:center;">暂无过滤规则</div>';
+        container.innerHTML = '<div style="color:var(--ink-muted);padding:0.5rem 0">暂无规则</div>';
         return;
       }
-
-      const typeNames = {
-        keyword_blacklist: '关键词',
-        min_word_count: '最低字数',
-        author_blacklist: '作者',
-        content_type: '类型'
-      };
-
-      container.innerHTML = rules.map(rule => \`
+      const typeNames = { keyword_blacklist: '关键词', min_word_count: '字数', author_blacklist: '作者', content_type: '类型' };
+      container.innerHTML = rules.map(r => \`
         <div class="rule-item">
-          <span class="rule-type" style="background:var(--primary); color:#fff; padding:2px 8px; border-radius:4px; font-size:12px; margin-right:8px">\${typeNames[rule.type] || rule.type}</span>
-          <span class="rule-value">\${escapeHtml(rule.value)}</span>
-          <button class="delete-rule" onclick="deleteRule('\${rule.type}', '\${escapeHtml(rule.value)}')" style="border:none; background:none; color:var(--error); cursor:pointer; margin-left:10px;">🗑️</button>
+          <span class="rule-type">\${typeNames[r.type] || r.type}</span>
+          <span class="rule-value">\${escapeHtml(r.value)}</span>
         </div>
       \`).join('');
     }
-    
-    // Note: deleteRule was missing in original logic, but UI had it. I am assuming it might need implementation or just keep it simple.
-    // The original code had a delete button but no onClick handler in the HTML string I read? 
-    // Wait, line 415 in original file: .delete-rule { ... }
-    // But line 837 in original file: <div class="rule-item">... no delete button HTML?
-    // Let me check line 837 in original file.
-    // Line 837-841: rule-item has spans but NO delete button.
-    // However, the CSS line 415 had .delete-rule. 
-    // I will add the Delete button UI but I need the logic. If the backend API supports it.
-    // Since I don't see a delete function in the original file, I will just leave the delete UI out to be safe, or add it if the API supports DELETE /api/rules.
-    // Looking at addRule (line 846), it posts to /api/rules.
-    // Safest bet is to match original functionality which seemed to lack the delete button in the HTML template despite having CSS for it.
-    // Actually, I'll stick to the original HTML structure for the rule item, just styled better.
 
-    // 添加规则
     async function addRule() {
       const type = document.getElementById('new-rule-type').value;
       const value = document.getElementById('new-rule-value').value.trim();
-
-      if (!value) {
-        showToast('请输入规则值');
-        return;
-      }
-
+      if (!value) { showToast('请输入规则内容'); return; }
       try {
         const res = await fetch('/api/rules', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ type, value })
         });
-
         if (res.ok) {
           showToast('规则已添加');
           document.getElementById('new-rule-value').value = '';
           loadRules();
-        } else {
-          showToast('添加失败');
-        }
-      } catch (err) {
-        showToast('添加失败: ' + err.message);
-      }
+        } else { showToast('添加失败'); }
+      } catch (err) { showToast('添加失败'); }
     }
 
-    // 保存 Cookie
     async function saveCookie() {
       const cookies = document.getElementById('cookie-input').value.trim();
-      if (!cookies) {
-        showToast('请输入 Cookie');
-        return;
-      }
-
+      if (!cookies) { showToast('请输入 Cookie'); return; }
       try {
         const res = await fetch('/api/cookie', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ cookies })
         });
-
-        if (res.ok) {
-          showToast('Cookie 已保存');
-        } else {
-          showToast('保存失败');
-        }
-      } catch (err) {
-        showToast('保存失败: ' + err.message);
-      }
+        if (res.ok) { showToast('Cookie 已保存'); }
+        else { showToast('保存失败'); }
+      } catch (err) { showToast('保存失败'); }
     }
 
-    // 同步关注列表
     async function syncFollowees() {
       showToast('开始同步...');
       try {
         const res = await fetch('/api/sync', { method: 'POST' });
         const data = await res.json();
-
         if (res.ok) {
           showToast('同步已启动: ' + (data.user || ''));
           setTimeout(loadStatus, 3000);
-        } else {
-          showToast('同步失败: ' + (data.error || ''));
-        }
-      } catch (err) {
-        showToast('同步失败: ' + err.message);
-      }
+        } else { showToast('同步失败: ' + (data.error || '')); }
+      } catch (err) { showToast('同步失败'); }
     }
 
-    // Toast 通知
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
     }
-
-    // 键盘快捷键
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
-    });
   </script>
 </body>
 </html>`;
